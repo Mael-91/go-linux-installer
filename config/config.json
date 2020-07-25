@@ -1,0 +1,25 @@
+{
+  "application": {
+    "name": "Go Linux Installer",
+    "sort_description": "Simple programme to install automatically and quickly software on your distribution",
+    "description" : "Program written in Golang allowing to install automatically and\nquickly software on a linux distribution during the installation of this one",
+    "version": "0.0.0",
+    "github": {
+      "repo": "https://github.com/Mael-91/go-linux-installer",
+      "release" : "https://github.com/Mael-91/go-linux-installer/releases",
+      "issue": "https://github.com/Mael-91/go-linux-installer/issues",
+      "pr": "https://github.com/Mael-91/go-linux-installer/pulls",
+      "contributors_list": {
+        "authors": [
+          {
+            "name": "Mael Constantin",
+            "email": "mael.constantin@gmail.com",
+            "github": "https://github.com/Mael-91",
+            "website": "https://mael-91.me"
+          }
+        ],
+        "contributors": []
+      }
+    }
+  }
+}
