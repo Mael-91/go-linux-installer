@@ -19,46 +19,24 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package app
+package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/viper"
+	"github.com/spf13/cobra"
 )
 
-type Config struct {
-	Application Application
+var updateCmd = &cobra.Command{
+	Use:   "update",
+	Short: "Permet de mettre à jour l'application",
+	Long: "Permet de mettre à jour l'application, une information vous sera affiché lorsque l'application doit être mise à jour",
+	Run: update,
 }
 
-type Application struct {
-	Name string `json:"name"`
-	ShortDescription string `json:"short_description"`
-	Description string `json:"description"`
-	Version string `json:"version"`
-	Github Github `json:"github"`
+func init() {
+	rootCmd.AddCommand(updateCmd)
 }
 
-type Github struct {
-	Repo             string `json:"repo"`
-	Release          string `json:"release"`
-	Issue            string `json:"issue"`
-	PullRequest      string `json:"pr"`
-}
-
-func LoadApplicationConf() Config {
-	viper.SetConfigName("config")
-	viper.SetConfigType("json")
-	viper.AddConfigPath("./config")
-
-	var config Config
-
-	if err := viper.ReadInConfig(); err != nil {
-		fmt.Printf("Error reading config file. %s", err)
-	}
-
-	if err := viper.Unmarshal(&config); err != nil {
-		fmt.Printf("Unable to decode into a struct. %s", err)
-	}
-
-	return config
+func update(cmd *cobra.Command, args []string) {
+	fmt.Printf("Créer cette commande")
 }

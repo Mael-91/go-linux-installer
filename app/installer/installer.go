@@ -19,46 +19,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package app
+package installer
 
-import (
-	"fmt"
-	"github.com/spf13/viper"
-)
+import "fmt"
 
-type Config struct {
-	Application Application
-}
-
-type Application struct {
-	Name string `json:"name"`
-	ShortDescription string `json:"short_description"`
-	Description string `json:"description"`
-	Version string `json:"version"`
-	Github Github `json:"github"`
-}
-
-type Github struct {
-	Repo             string `json:"repo"`
-	Release          string `json:"release"`
-	Issue            string `json:"issue"`
-	PullRequest      string `json:"pr"`
-}
-
-func LoadApplicationConf() Config {
-	viper.SetConfigName("config")
-	viper.SetConfigType("json")
-	viper.AddConfigPath("./config")
-
-	var config Config
-
-	if err := viper.ReadInConfig(); err != nil {
-		fmt.Printf("Error reading config file. %s", err)
-	}
-
-	if err := viper.Unmarshal(&config); err != nil {
-		fmt.Printf("Unable to decode into a struct. %s", err)
-	}
-
-	return config
+func DebianInstaller(updateBefore bool, upgradeBefore bool, packages []string) error {
+	fmt.Printf("Hello from debian %s", packages)
+	return nil
 }

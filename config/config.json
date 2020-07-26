@@ -8,18 +8,7 @@
       "repo": "https://github.com/Mael-91/go-linux-installer",
       "release" : "https://github.com/Mael-91/go-linux-installer/releases",
       "issue": "https://github.com/Mael-91/go-linux-installer/issues",
-      "pr": "https://github.com/Mael-91/go-linux-installer/pulls",
-      "contributors_list": {
-        "authors": [
-          {
-            "name": "Mael Constantin",
-            "email": "mael.constantin@gmail.com",
-            "github": "https://github.com/Mael-91",
-            "website": "https://mael-91.me"
-          }
-        ],
-        "contributors": []
-      }
+      "pr": "https://github.com/Mael-91/go-linux-installer/pulls"
     }
   }
 }

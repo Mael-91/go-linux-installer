@@ -1,0 +1,13 @@
+{
+  "go_linux_installer": {
+    "os": "debian",
+    "sudo": false,
+    "update_before_install": true,
+    "upgrade_before_install": false,
+    "packages": [
+      "wget",
+      "nodejs",
+      "npm"
+    ]
+  }
+}
