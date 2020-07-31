@@ -25,6 +25,11 @@ import (
 	"go-linux-installer/cmd"
 )
 
+/**
+* Dans la fonction init() vérifier si une mise à jours est disponible
+* sur github (voir api github si cela est possible)
+*/
+
 func main() {
 	cmd.Execute()
 }

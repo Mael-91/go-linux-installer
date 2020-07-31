@@ -75,6 +75,21 @@ func install(cmd *cobra.Command, args []string) error {
 			return err
 		}
 	}
+	if noConfigFile {
+		iConfig := InstallerConfigFile{
+			GoLinuxInstaller: InstallerConfig{
+				Os: strings.ToLower(distrib),
+				Sudo: sudo,
+				UpdateBeforeInstall: updateBeforeInstall,
+				UpgradeBeforeInstall: upgradeBeforeInstall,
+				Packages: packages,
+			},
+		}
+		err := getInstallerManager(iConfig)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -109,12 +124,15 @@ func unmarshalConfig() (configFile InstallerConfigFile, err error) {
 */
 func getInstallerManager(cf InstallerConfigFile) error {
 	conf := cf.GoLinuxInstaller
-	currentOs := conf.Os
+	currentOs := strings.ToLower(conf.Os)
 	if currentOs == "" {
 		return errors.New("Aucun OS (nom de la distribution linux) n'a été configuré.")
 	}
-	if strings.ToLower(currentOs) == DEBIAN {
-		return installer.DebianInstaller(conf.UpdateBeforeInstall, conf.UpgradeBeforeInstall, conf.Packages)
+	switch currentOs {
+		case DEBIAN:
+			return installer.DebianInstaller(conf.UpdateBeforeInstall, conf.UpgradeBeforeInstall, conf.Packages, conf.Sudo, currentOs)
+		case UBUNTU:
+			return installer.DebianInstaller(conf.UpdateBeforeInstall, conf.UpgradeBeforeInstall, conf.Packages, conf.Sudo, currentOs)
 	}
 	return errors.New("Impossible de trouver le manager d'installation pour cette distribution")
 }
