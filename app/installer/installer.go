@@ -22,8 +22,13 @@ THE SOFTWARE.
 package installer
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
+	"io"
+	"log"
+	osGo "os"
+	"os/exec"
 )
 
 const (
@@ -35,68 +40,73 @@ var (
 	apt = "install -y "
 	inlinePackage string
 	os string
-	sudo bool
 )
 
-func DebianInstaller(updateBefore bool, upgradeBefore bool, packages []string, withSudo bool, currentOs string) error {
+func DebianInstaller(updateBefore bool, upgradeBefore bool, packages []string, currentOs string) error {
 	os = currentOs
-	sudo = withSudo
 	manager, err := setPackageManager()
 	if err != nil {
 		return err
 	}
 	command := manager + apt
-	if sudo {
-		command = manager + apt
-	}
-	err = updateDistrib(manager, updateBefore)
-	if err != nil {
+	if err = updateDistrib(updateBefore); err != nil {
 		return err
 	}
-	err = upgradeDistrib(manager, upgradeBefore)
-	if err != nil {
+	if err = upgradeDistrib(upgradeBefore); err != nil {
 		return err
 	}
 	command = command + getInlinePackages(packages)
-	fmt.Printf("%s", command)
+	cmd := exec.Command("echo", "hello")
+	if err := printShellResult(cmd); err != nil {
+		log.Fatal(err)
+	}
 	return nil
 }
 
 func setPackageManager() (string, error) {
-	var cmd string
 	switch os {
 		case DEBIAN:
-			cmd = "apt-get "
+			return "apt-get ", nil
 			break
 		case UBUNTU:
-			cmd = "apt-get "
+			return "apt-get ", nil
 			break
 		default:
 			return "", errors.New("Impossible de déterminer le package manager pour cette os")
 	}
-	switch sudo {
-		case true:
-			return "sudo " + cmd, nil
-		case false:
-			return cmd, nil
-		default:
-			return "", errors.New("Impossible de déterminer si l'action doit être effectué en mode sudo")
-	}
+	return "", errors.New("Une erreur est survenue setPackageManager")
 }
 
-func updateDistrib(cmd string, update bool) error {
-	if !update {
-		return nil
+func updateDistrib(update bool) error {
+	if update {
+		switch os {
+			case DEBIAN:
+				cmd := exec.Command("apt-get", "update")
+				if err := printShellResult(cmd); err != nil {
+					log.Fatal(err)
+				}
+				break
+			default:
+				return errors.New("Aucun OS défini")
+
+		}
 	}
-	// Vérification pour les mise à jour
 	return nil
 }
 
-func upgradeDistrib(cmd string, upgrade bool) error {
-	if !upgrade {
-		return nil
+func upgradeDistrib(upgrade bool) error {
+	if upgrade {
+		switch os {
+			case DEBIAN:
+				cmd := exec.Command("apt-get", "upgrade -y")
+				if err := printShellResult(cmd); err != nil {
+					log.Fatal(err)
+				}
+				break
+			default:
+				return errors.New("Aucun OS défini")
+		}
 	}
-	// Mise à jour de la distribution
 	return nil
 }
 
@@ -111,4 +121,17 @@ func getInlinePackages(packages []string) string {
 		}
 	}
 	return inlinePackage
+}
+
+func printShellResult(cmd *exec.Cmd) error {
+	var stdBuffer bytes.Buffer
+	mw := io.MultiWriter(osGo.Stdout, &stdBuffer)
+	cmd.Stdout = mw
+	//cmd.Stderr = mw
+
+	if err := cmd.Run(); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf(stdBuffer.String())
+	return nil
 }

@@ -130,9 +130,9 @@ func getInstallerManager(cf InstallerConfigFile) error {
 	}
 	switch currentOs {
 		case DEBIAN:
-			return installer.DebianInstaller(conf.UpdateBeforeInstall, conf.UpgradeBeforeInstall, conf.Packages, conf.Sudo, currentOs)
+			return installer.DebianInstaller(conf.UpdateBeforeInstall, conf.UpgradeBeforeInstall, conf.Packages, currentOs)
 		case UBUNTU:
-			return installer.DebianInstaller(conf.UpdateBeforeInstall, conf.UpgradeBeforeInstall, conf.Packages, conf.Sudo, currentOs)
+			return installer.DebianInstaller(conf.UpdateBeforeInstall, conf.UpgradeBeforeInstall, conf.Packages, currentOs)
 	}
 	return errors.New("Impossible de trouver le manager d'installation pour cette distribution")
 }
